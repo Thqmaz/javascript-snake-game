@@ -26,20 +26,34 @@
 <body>
 
     <!-- Add your site or application content here -->
-    <div id="keyboardInput">Score</div>
 
     <div id="board">
-        <div id="gameover">
-            <h2>GAME OVER!</h2>
-            <span id="gameSummary"></span>
-            <p>Want to try again?</p>
+        <h2 id="scoreel">Score: <span id="scoreElement"></span></h2>
+        <div id="gameover" style="padding-left:20px;">
+            <h2><b>GAME OVER!</b></h2>
+            <span id="gameSummary"></span> <br><br>Save your score by filling in your name. Try and get in the top 10!
             <form action="submitScore.php" method="post">
                 <label>Name: </label>
                 <input type="text" name="displayName">
                 <input type="hidden" name="score" id="score">
                 <input type="submit" name="submit" value="Submit score">
             </form>
-            <button onclick="resetGame()">Retry</button>
+            <p><b>Push spacebar to try again!</b></p>
+        </div>
+        <div id="scoreBoard">
+            <h2>Scoreboard</h2>
+            <ul>
+                <?php
+                $dbconn = mysqli_connect('localhost', 'root', '', 'js-game');
+                $sqlQuery = "SELECT * FROM `snake` ORDER BY `score` DESC";
+                $result = $dbconn->query($sqlQuery);
+                while($row = mysqli_fetch_array($result)) {
+                ?>
+                <li><?php echo $row['name'] . " | " . $row['score'] ?></li>
+                <?php
+                }
+                ?>
+            </ul>
         </div>
     </div>
 

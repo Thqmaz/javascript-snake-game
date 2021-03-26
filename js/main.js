@@ -2,8 +2,9 @@ let boardSize = 17;
 let timeCounter = 0;
 let board = document.getElementById("board");
 let score = document.getElementById("score");
-let keyboardInput = document.getElementById("keyboardInput");
+let scoreElement = document.getElementById("scoreElement");
 let direction = 0;
+let gameoverbool = 0;
 let foodIsEaten = true;
 let snakePosition = { x: Math.floor(boardSize / 2), y: Math.floor(boardSize / 2) };
 let foodPosition = { x: 0, y: 0 };
@@ -61,7 +62,7 @@ function gameLoop() {
     snakeEatsFood();
 
     timeCounter++;
-    var timeoutTime = 550 - snakePositions.length * 30 - timeCounter / 2;
+    var timeoutTime = 585 - snakePositions.length * 35 - timeCounter / 2;
     if (timeoutTime < 100) {
         timeoutTime = 100;
     }
@@ -69,9 +70,19 @@ function gameLoop() {
 }
 
 function gameOver(dieReason) {
+    gameoverbool = 1;
     document.getElementById("gameover").style.display = "block";
     document.getElementById("score").value = snakePositions.length;
     document.getElementById("gameSummary").innerHTML = `Oh no! You <b>${dieReason}</b>! <br>Your score was: <b>${snakePositions.length}</b>.`;
+
+    window.addEventListener("keydown", function(event) {
+        switch (event.code) {
+            case "Space":
+                document.getElementById("gameover").style.display = "none";
+                gameoverbool = 0;
+                break;
+        }
+    }, true);
 }
 
 // ResetGame Function
@@ -85,12 +96,20 @@ function resetGame() {
 // CollisionCheck Function
 function collisionCheck() {
     if (snakePosition.x < 0 || snakePosition.y < 0 || snakePosition.x > boardSize - 1 || snakePosition.y > boardSize - 1) {
-        gameOver("bumped into a wall")
+        gameOver("bumped into a wall");
+        direction = [0, 0];
+        snakePosition = { x: Math.floor((boardSize - 1) / 2), y: Math.floor((boardSize - 1) / 2) };
+        snakePositions = [];
+        snakePositions.push(`x${snakePosition.x}y${snakePosition.y}`);
     }
     let snakePositionControle = `x${snakePosition.x}y${snakePosition.y}`;
     for (let i = 0; i < snakePositions.length - 1; i++) {
         if (snakePositionControle == snakePositions[i]) {
             gameOver("bumped into yourself");
+            direction = [0, 0];
+            snakePosition = { x: Math.floor((boardSize - 1) / 2), y: Math.floor((boardSize - 1) / 2) };
+            snakePositions = [];
+            snakePositions.push(`x${snakePosition.x}y${snakePosition.y}`);
         }
     }
 }
@@ -102,7 +121,7 @@ function drawSnake() {
         if (i == snakePositions.length - 1) document.getElementById(snakePositions[i]).className += " bodyEnds";
         document.getElementById(snakePositions[i]).className += " bodySnake";
     }
-    document.getElementById("keyboardInput").innerHTML = snakePositions.length;
+    document.getElementById("scoreElement").innerHTML = snakePositions.length;
 }
 
 // DrawFood Function
@@ -128,7 +147,7 @@ function drawFood() {
 function snakeEatsFood() {
     if (snakePosition.x == foodPosition.x && snakePosition.y == foodPosition.y) {
         foodIsEaten = true;
-        snakePositions.push("x" + snakePosition.x + "y" + snakePosition.y);
+        snakePositions.push(`x${snakePosition.x}y${snakePosition.y}`);
     }
 }
 
@@ -139,50 +158,52 @@ window.requestAnimationFrame(gameLoop, 0);
 
 // Keyboard controls
 window.addEventListener("keydown", function(event) {
-    switch (event.key) {
-        // Arrow controls
-        case "ArrowUp":
-            if (direction != 3) {
-                direction = 4;
-            }
-            break;
-        case "ArrowDown":
-            if (direction != 4) {
-                direction = 3;
-            }
-            break;
-        case "ArrowRight":
-            if (direction != 1) {
-                direction = 2;
-            }
-            break;
-        case "ArrowLeft":
-            if (direction != 2) {
-                direction = 1;
-            }
-            break;
-            // WASD controls
-        case "w":
-            if (direction != 3) {
-                direction = 4;
-            }
-            break;
-        case "s":
-            if (direction != 4) {
-                direction = 3;
-            }
-            break;
-        case "d":
-            if (direction != 1) {
-                direction = 2;
-            }
-            break;
-        case "a":
-            if (direction != 2) {
-                direction = 1;
-            }
-            break;
-        default:
-            break;
+    if (!gameoverbool) {
+        switch (event.key) {
+            // Arrow controls
+            case "ArrowUp":
+                if (direction != 3) {
+                    direction = 4;
+                }
+                break;
+            case "ArrowDown":
+                if (direction != 4) {
+                    direction = 3;
+                }
+                break;
+            case "ArrowRight":
+                if (direction != 1) {
+                    direction = 2;
+                }
+                break;
+            case "ArrowLeft":
+                if (direction != 2) {
+                    direction = 1;
+                }
+                break;
+                // WASD controls
+            case "w":
+                if (direction != 3) {
+                    direction = 4;
+                }
+                break;
+            case "s":
+                if (direction != 4) {
+                    direction = 3;
+                }
+                break;
+            case "d":
+                if (direction != 1) {
+                    direction = 2;
+                }
+                break;
+            case "a":
+                if (direction != 2) {
+                    direction = 1;
+                }
+                break;
+            default:
+                break;
+        }
     }
 }, true);

@@ -97,27 +97,73 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+body {
+    background: url("../img/background.jpg") no-repeat;
+    background-size: cover;
+}
+
 #board {
-    display: absolute;
+    display: block;
     margin: auto;
     width: fit-content;
     background-color: #aaaaaa;
     border: 10px solid red;
     align-content: center;
     z-index: -1;
+    text-align: center;
+}
+
+#scoreBoard {
+    display: block;
+    float: right;
+    height: 680px;
+    width: 200px;
+    background-color: #aa2d2d;
+    border-left: 1px solid black;
+}
+
+#scoreBoard h2 {
+    color: white;
+}
+
+#scoreBoard ul {
+    list-style: none;
+}
+
+#scoreBoard ul li {
+    margin-left: -50px;
+    font-size: 22px;
+    color: #ccc;
+}
+
+#scoreel {
+    margin: 0 auto;
+    background-color: #922929;
+    color: white;
+    border-bottom: 1px solid black;
 }
 
 #gameover {
     display: none;
     z-index: 9;
+    border-bottom: 1px solid black;
 }
 
 .cell {
+    border: 1px solid black;
     height: 40px;
     width: 40px;
     display: inline-block;
     vertical-align: top;
-    border: 1px solid black;
     border-spacing: 15px;
 }
 
